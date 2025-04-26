@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CompanyRadar — полная информация о компаниях в один клик</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f97316;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--light);
+            color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .hero {
+            padding: 80px 0;
+            background: linear-gradient(120deg, #d4e5ff 0%, white 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+        
+        .hero-text {
+            flex: 1;
+        }
+        
+        .hero-image {
+            flex: 1;
+            position: relative;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 48px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: var(--gray);
+        }
+        
+        .highlight {
+            color: var(--primary);
+        }
+        
+        .badge {
+            display: inline-block;
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(37, 99, 235, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--primary);
+        }
+        
+        .case-studies {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .case-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .case-image {
+            height: 200px;
+            background-color: var(--light-gray);
+            position: relative;
+        }
+        
+        .case-content {
+            padding: 20px;
+        }
+        
+        .report-example {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+        
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .report-section {
+            margin-bottom: 30px;
+        }
+        
+        .report-section h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .data-list {
+            background-color: var(--light);
+            border-radius: 6px;
+            padding: 15px;
+        }
+        
+        .data-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .data-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .data-label {
+            font-weight: 600;
+            width: 200px;
+            flex-shrink: 0;
+        }
+        
+        .data-value {
+            flex-grow: 1;
+        }
+        
+        .pricing {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            position: relative;
+        }
+        
+        .special-offer {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background-color: var(--secondary);
+            color: white;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 14px;
+        }
+        
+        .price {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 20px 0;
+            color: var(--dark);
+        }
+        
+        .price span {
+            font-size: 18px;
+            color: var(--gray);
+        }
+        
+        .pricing-features {
+            text-align: left;
+            margin: 30px 0;
+        }
+        
+        .pricing-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .check-icon {
+            width: 20px;
+            height: 20px;
+            background-color: rgba(37, 99, 235, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .check-icon svg {
+            width: 12px;
+            height: 12px;
+            fill: var(--primary);
+        }
+        
+        .cta {
+            background: linear-gradient(120deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta h2, .cta p {
+            color: white;
+        }
+        
+        form {
+            max-width: 500px;
+            margin: 40px auto 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-align: left;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .footer-logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .footer-links h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: var(--light-gray);
+        }
+        
+        @media screen and (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .hero-image {
+                order: -1;
+            }
+            
+            h1 {
+                font-size: 36px;
+            }
+            
+            h2 {
+                font-size: 28px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="nav">
+                <a href="#" class="logo">CompanyRadar</a>
+                <div class="nav-links">
+                    <a href="#features">Возможности</a>
+                    <a href="#cases">Примеры отчетов</a>
+                    <a href="#pricing">Стоимость</a>
+                </div>
+                <a href="#preorder" class="btn">Оформить предзаказ</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="badge">СКОРО ЗАПУСК</div>
+                    <h1>Вся информация о компаниях <span class="highlight">в один клик</span></h1>
+                    <p>CompanyRadar — революционный сервис, который собирает и структурирует всю доступную информацию о компаниях из множества источников. Получите полную картину о любом бизнесе для принятия взвешенных решений.</p>
+                    <a href="#preorder" class="btn">Оформить предзаказ и получить 5 бесплатных поисков</a>
+                </div>
+                <div class="hero-image">
+                    <img src="/api/placeholder/600/400" alt="Интерфейс CompanyRadar" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Максимально полная информация из <span class="highlight">всех открытых источников</span></h2>
+                <p>Наша технология анализирует огромное количество данных и формирует структурированный отчет</p>
+            </div>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                        </svg>
+                    </div>
+                    <h3>Основная информация</h3>
+                    <p>Юридические данные, реквизиты, учредители, руководители, финансовые показатели и многое другое</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                        </svg>
+                    </div>
+                    <h3>Сотрудники</h3>
+                    <p>Полная информация о сотрудниках компании, руководстве и их связях с другими организациями</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+                        </svg>
+                    </div>
+                    <h3>Упоминания и отзывы</h3>
+                    <p>Сбор информации о компании с форумов, отзовиков и других источников с оценкой тональности</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-2V9h-2V7h4v10z"/>
+                        </svg>
+                    </div>
+                    <h3>Новости</h3>
+                    <p>Собираем все новости, связанные с компанией из СМИ и других источников</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+                        </svg>
+                    </div>
+                    <h3>Вакансии</h3>
+                    <p>Актуальные вакансии компании с разных площадок для понимания планов развития</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                    </div>
+                    <h3>Закупки и тендеры</h3>
+                    <p>Информация об участии в закупках, выигранных и проигранных тендерах</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section class="section" id="cases" style="background-color: #f1f5f9;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Примеры <span class="highlight">отчетов</span></h2>
+                <p>Наши отчеты содержат максимально полную информацию о компаниях</p>
+            </div>
+            
+            <div class="report-example">
+                <div class="report-header">
+                    <div>
+                        <h3>Отчет по компании: ООО "ТехноПрогресс"</h3>
+                        <p>Дата формирования: 26.04.2025</p>
+                    </div>
+                    <div>
+                        <img src="/api/placeholder/100/100" alt="Логотип компании" style="border-radius: 10px;" />
+                    </div>
+                </div>
+                
+                <div class="report-section">
+                    <h4>Основная информация</h4>
+                    <div class="data-list">
+                        <div class="data-item">
+                            <div class="data-label">Полное наименование:</div>
+                            <div class="data-value">Общество с ограниченной ответственностью "ТехноПрогресс"</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">ИНН / КПП:</div>
+                            <div class="data-value">7725123456 / 772501001</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">ОГРН:</div>
+                            <div class="data-value">1157746123456 от 25.02.2015</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Юридический адрес:</div>
+                            <div class="data-value">115280, г. Москва, ул. Ленинская Слобода, д. 19, стр. 6</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Генеральный директор:</div>
+                            <div class="data-value">Иванов Александр Сергеевич (с 15.03.2018)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-section">
+                    <h4>Финансовые показатели</h4>
+                    <div class="data-list">
+                        <div class="data-item">
+                            <div class="data-label">Выручка (2024):</div>
+                            <div class="data-value">542 млн руб. (+15% к 2023)</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Чистая прибыль (2024):</div>
+                            <div class="data-value">78 млн руб. (+22% к 2023)</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Стоимость активов:</div>
+                            <div class="data-value">385 млн руб.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-section">
+                    <h4>Последние новости (5 из 37)</h4>
+                    <div class="data-list">
+                        <div class="data-item" style="display: block;">
+                            <p><strong>20.04.2025</strong> - ООО "ТехноПрогресс" заключило контракт на поставку оборудования для госкорпорации "Ростех" на сумму 120 млн руб.</p>
+                        </div>
+                        <div class="data-item" style="display: block;">
+                            <p><strong>15.03.2025</strong> - Компания открыла новый офис в Санкт-Петербурге.</p>
+                        </div>
+                        <div class="data-item" style="display: block;">
+                            <p><strong>02.02.2025</strong> - ООО "ТехноПрогресс" получило патент на инновационную систему обработки данных.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-section">
+                    <h4>Активные вакансии (3 из 12)</h4>
+                    <div class="data-list">
+                        <div class="data-item" style="display: block;">
+                            <p><strong>Frontend-разработчик</strong> - от 180 000 руб., размещено 15.04.2025 на hh.ru</p>
+                        </div>
+                        <div class="data-item" style="display: block;">
+                            <p><strong>Product Manager</strong> - от 250 000 руб., размещено 10.04.2025 на Хабр Карьера</p>
+                        </div>
+                        <div class="data-item" style="display: block;">
+                            <p><strong>DevOps-инженер</strong> - от 220 000 руб., размещено 05.04.2025 на Avito</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <p>В полном отчете также доступны разделы:</p>
+                    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
+                        <div class="badge">Судебные дела</div>
+                        <div class="badge">Упоминания на форумах</div>
+                        <div class="badge">Связанные компании</div>
+                        <div class="badge">Госзакупки и тендеры</div>
+                        <div class="badge">История изменений</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section" id="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h2>Простая и <span class="highlight">понятная</span> стоимость</h2>
+                <p>Оплачивайте только те отчеты, которые вам нужны, без подписок и скрытых платежей</p>
+            </div>
+            
+            <div class="pricing">
+                <div class="special-offer">Специальное предложение</div>
+                <h3>Стоимость одного полного отчета</h3>
+                <div class="price">3 900 ₽ <span>за отчет</span></div>
+                <p>Платите только за то, что вам действительно нужно</p>
+                
+                <div class="pricing-features">
+                    <div class="pricing-feature">
+                        <div class="check-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                            </svg>
+                        </div>
+                        <div>Полный отчет со всеми доступными данными о компании</div>
+                    </div>
+                    <div class="pricing-feature">
+                        <div class="check-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                            </svg>
+                        </div>
+                        <div>Данные из всех открытых источников (более 50 источников)</div>
+                    </div>
+                    <div class="pricing-feature">
+                        <div class="check-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                            </svg>
+                        </div>
+                        <div>Экспорт в PDF, Excel и другие форматы</div>
+                    </div>
+                    <div class="pricing-feature">
+                        <div class="check-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                            </svg>
+                        </div>
+                        <div>Доступ к отчету в течение 30 дней</div>
+                    </div>
+                    <div class="pricing-feature">
+                        <div class="check-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                            </svg>
+                        </div>
+                        <div>Без подписок и скрытых платежей</div>
+                    </div>
+                </div>
+                
+                <div style="margin: 30px 0;">
+                    <a href="#preorder" class="btn">Оформить предзаказ сейчас</a>
+                    <p style="margin-top: 10px; font-size: 14px; color: var(--primary);">И получить 5 бесплатных отчетов после запуска</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="section cta" id="preorder">
+        <div class="container">
+            <div class="section-title">
+                <h2>Оформите предзаказ и получите <span class="highlight" style="color: white;">5 бесплатных отчетов</span></h2>
+                <p>Сервис находится в разработке и скоро будет запущен. Оставьте заявку сейчас и получите преимущества раннего доступа.</p>
+            </div>
+            
+            <form>
+                <div class="form-group">
+                    <label for="name">Ваше имя</label>
+                    <input type="text" id="name" placeholder="Введите ваше имя" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Название компании</label>
+                    <input type="text" id="company" placeholder="Введите название компании" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Введите ваш email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Телефон</label>
+                    <input type="tel" id="phone" placeholder="Введите ваш телефон" required>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Комментарий (необязательно)</label>
+                    <textarea id="comment" placeholder="Какие данные о компаниях вас интересуют больше всего?" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-secondary" style="background-color: white; width: 100%;">Оформить предзаказ</button>
+                <p style="margin-top: 10px; font-size: 14px; color: rgba(255,255,255,0.8);">Нажимая на кнопку, вы соглашаетесь с политикой конфиденциальности</p>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <a href="#" class="footer-logo">CompanyRadar</a>
+                    <p>Революционный сервис аналитики компаний, собирающий данные из множества открытых источников и предоставляющий полную картину о бизнесе</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Сервис</h4>
+                    <ul>
+                        <li><a href="#features">Возможности</a></li>
+                        <li><a href="#cases">Примеры отчетов</a></li>
+                        <li><a href="#pricing">Стоимость</a></li>
+                        <li><a href="#preorder">Предзаказ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Компания</h4>
+                    <ul>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Команда</a></li>
+                        <li><a href="#">Карьера</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Правовая информация</h4>
+                    <ul>
+                        <li><a href="#">Условия использования</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                        <li><a href="#">Обработка данных</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 CompanyRadar. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
